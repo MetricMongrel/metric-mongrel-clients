@@ -58,7 +58,7 @@ export class MetricCollector {
      */
     metricType?: "AUTO" | "MANUAL"
   ) {
-    await this.sendPostRequest("/metrics", {
+    await this.sendPostRequest("/increment", {
       metricName,
       metricValue,
       ...(metricMetadata ? metricMetadata : {}),
@@ -75,7 +75,7 @@ export class MetricCollector {
     modelOutput: string,
     metricMetadata?: { [key: string]: number | boolean | string }
   ) {
-    await this.sendPostRequest("/metrics", {
+    await this.sendPostRequest("/modelIO", {
       modelName,
       userInput,
       modelOutput,
