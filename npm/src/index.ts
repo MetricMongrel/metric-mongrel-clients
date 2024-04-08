@@ -1,6 +1,9 @@
 /**
  * Main file with all exports from the Metric Mongrel NPM packages
  */
-export * from "./ErrorRequestHandler";
-export * from "./MMLogger";
-export * from "./MetricCollector";
+
+import { ErrorRequestHandler } from "./ErrorRequestHandler/ErrorRequestHandler";
+import MetricCollector from "./MetricCollector/index";
+import { MMLogger } from "./MMLogger/MMLogger";
+
+export { ErrorRequestHandler, MMLogger, MetricCollector };

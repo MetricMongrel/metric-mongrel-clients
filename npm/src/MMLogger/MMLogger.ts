@@ -12,9 +12,14 @@ import httpContext from "express-http-context";
 export class MMLogger {
   private logger: bunyan;
   private metadata?: MMLoggerMetadata;
+  /**
+   * Whether to log to the console or via bunyan
+   */
+  private console: boolean;
 
-  constructor(loggerName: string) {
+  constructor(loggerName: string, config?: { console?: boolean }) {
     this.logger = bunyan.createLogger({ name: loggerName });
+    this.console = config?.console ?? false;
   }
 
   public setMetadata(metadata: MMLoggerMetadata): void {
@@ -35,28 +40,48 @@ export class MMLogger {
    * Log an info with the metadata
    */
   public info(message: string, ...args: any[]): void {
-    this.logger.info(`${this.getMetadataLoggerString()}${message}`, ...args);
+    const toLog = `${this.getMetadataLoggerString()}${message}`;
+    if (this.console) {
+      console.log(toLog, ...args);
+    } else {
+      this.logger.info(toLog, ...args);
+    }
   }
 
   /**
    * Log an warn with the metadata
    */
   public warn(message: string, ...args: any[]): void {
-    this.logger.debug(`${this.getMetadataLoggerString()}${message}`, ...args);
+    const toLog = `${this.getMetadataLoggerString()}${message}`;
+    if (this.console) {
+      console.warn(toLog, ...args);
+    } else {
+      this.logger.warn(toLog, ...args);
+    }
   }
 
   /**
    * Log an error with the metadata
    */
   public error(message: string, ...args: any[]): void {
-    this.logger.error(`${this.getMetadataLoggerString()}${message}`, ...args);
+    const toLog = `${this.getMetadataLoggerString()}${message}`;
+    if (this.console) {
+      console.error(toLog, ...args);
+    } else {
+      this.logger.error(toLog, ...args);
+    }
   }
 
   /**
    * Log an debug with the metadata
    */
   public debug(message: string, ...args: any[]): void {
-    this.logger.debug(`${this.getMetadataLoggerString()}${message}`, ...args);
+    const toLog = `${this.getMetadataLoggerString()}${message}`;
+    if (this.console) {
+      console.debug(toLog, ...args);
+    } else {
+      this.logger.debug(toLog, ...args);
+    }
   }
 
   /**

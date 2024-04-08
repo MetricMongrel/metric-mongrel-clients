@@ -1,9 +1,11 @@
 import { NextFunction, Response, Request } from "express";
 import metricCollector from "../MetricCollector";
 import { MMLoggerMetadata } from "../MMLogger/MMLogger.types";
-import Logger from "../MMLogger";
+import { MMLogger } from "../MMLogger/MMLogger";
 
-export const ErrorRequestHandlerLogger = new Logger("error-request-handler");
+export const ErrorRequestHandlerLogger = new MMLogger("error-request-handler", {
+  console: true,
+});
 
 /**
  * Log this error to our server, with the metadata of the
@@ -14,7 +16,7 @@ export function ErrorRequestHandler(
   req: Request,
   res: Response,
   next: NextFunction,
-  logger?: Logger
+  logger?: MMLogger
 ) {
   if (err) {
     try {

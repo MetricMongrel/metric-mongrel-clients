@@ -1,3 +1,4 @@
+import { MMLogger } from "../MMLogger/MMLogger";
 import { MM_API_KEY, MM_BASE_URL } from "../envVars";
 
 /**
@@ -7,9 +8,11 @@ import { MM_API_KEY, MM_BASE_URL } from "../envVars";
 export class MetricCollector {
   private apiKey: string;
   private baseURL: string;
+  private logger: MMLogger;
   constructor() {
     this.apiKey = MM_API_KEY;
-    this.baseURL = new URL(MM_BASE_URL).href;
+    this.baseURL = new URL("v1", MM_BASE_URL).href;
+    this.logger = new MMLogger("mm-metrics-collector", { console: true });
   }
 
   /**
@@ -31,11 +34,15 @@ export class MetricCollector {
       "Content-Type": "application/json",
       Authorization: `Bearer ${this.apiKey}`,
     };
-    await fetch(url, {
+    const res = await fetch(url, {
       method: "POST",
       headers,
       body: JSON.stringify(body),
     });
+    if (res.status !== 200) {
+      console.log(`Failed to send MetricMongal: ${res.status}`);
+      this.logger.warn(`Failed to send MetricMongal: ${res.status}`);
+    }
   }
 
   /**

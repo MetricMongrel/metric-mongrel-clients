@@ -1,14 +1,18 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es2021",
     "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
     "outDir": "./dist",
-    "declaration": true,      // Generates corresponding '.d.ts' file.
-    "declarationMap": true    // Creates a source map file for the declarations.
+    "declaration": true, // Generates corresponding '.d.ts' file.
   },
   "type": "module",
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
 }
