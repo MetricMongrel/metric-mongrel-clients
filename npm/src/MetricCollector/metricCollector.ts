@@ -32,7 +32,7 @@ export class MetricCollector {
     const url = `${this.baseURL}${endpoint}`;
     const headers = {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${this.apiKey}`,
+      "mm-api-key": this.apiKey,
     };
     const res = await fetch(url, {
       method: "POST",
