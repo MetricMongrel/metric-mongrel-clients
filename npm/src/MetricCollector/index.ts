@@ -11,5 +11,6 @@ declare global {
 const metricCollector = new MetricCollector();
 
 export default metricCollector;
+module.exports = metricCollector;
 
 globalThis.MetricCollector = metricCollector;
