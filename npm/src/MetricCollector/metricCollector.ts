@@ -40,6 +40,7 @@ export class MetricCollector {
       body: JSON.stringify(body),
     });
     if (res.status !== 200) {
+      console.log(`Failed to send MetricMongal: ${res.status}`);
       this.logger.warn(`Failed to send MetricMongal: ${res.status}`);
     }
   }
@@ -57,7 +58,7 @@ export class MetricCollector {
      */
     metricType?: "AUTO" | "MANUAL"
   ) {
-    await this.sendPostRequest("metrics", {
+    await this.sendPostRequest("/metrics", {
       metricName,
       metricValue,
       ...(metricMetadata ? metricMetadata : {}),
