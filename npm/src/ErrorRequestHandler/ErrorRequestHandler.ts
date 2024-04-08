@@ -14,7 +14,7 @@ export function ErrorRequestHandler(
   req: Request,
   res: Response,
   next: NextFunction,
-  logger?: Logger
+  logger?: MMLogger
 ) {
   if (err) {
     try {
