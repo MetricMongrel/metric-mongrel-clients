@@ -38,9 +38,9 @@ export class MetricCollector {
       method: "POST",
       headers,
       body: JSON.stringify(body),
+      credentials: "include",
     });
     if (res.status !== 200) {
-      console.log(`Failed to send MetricMongal: ${res.status}`);
       this.logger.warn(`Failed to send MetricMongal: ${res.status}`);
     }
   }

@@ -1,6 +1,6 @@
 {
   "name": "@metric-mongrel/client",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Official Metric Mongrel Client Packages",
   "main": "dist/index.js",
   "exports": {
