@@ -5,7 +5,7 @@
     "strict": true,
     "esModuleInterop": true,
     "outDir": "./dist",
-    // "declaration": true, // Generates corresponding '.d.ts' file.
+    "declaration": true, // Generates corresponding '.d.ts' file.
   },
   "type": "module",
   "include": [
