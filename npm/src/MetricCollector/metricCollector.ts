@@ -12,7 +12,7 @@ export class MetricCollector {
   constructor() {
     this.apiKey = MM_API_KEY;
     this.baseURL = new URL("v1", MM_BASE_URL).href;
-    this.logger = new MMLogger("mm-metrics-collector");
+    this.logger = new MMLogger("mm-metrics-collector", { console: true });
   }
 
   /**

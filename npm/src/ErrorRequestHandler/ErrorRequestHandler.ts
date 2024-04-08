@@ -3,7 +3,9 @@ import metricCollector from "../MetricCollector";
 import { MMLoggerMetadata } from "../MMLogger/MMLogger.types";
 import { MMLogger } from "../MMLogger/MMLogger";
 
-export const ErrorRequestHandlerLogger = new MMLogger("error-request-handler");
+export const ErrorRequestHandlerLogger = new MMLogger("error-request-handler", {
+  console: true,
+});
 
 /**
  * Log this error to our server, with the metadata of the
