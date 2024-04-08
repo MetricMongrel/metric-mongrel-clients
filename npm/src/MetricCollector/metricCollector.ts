@@ -11,7 +11,7 @@ export class MetricCollector {
   private logger: MMLogger;
   constructor() {
     this.apiKey = MM_API_KEY;
-    this.baseURL = new URL("v1", MM_BASE_URL).href;
+    this.baseURL = new URL("v1/metrics", MM_BASE_URL).href;
     this.logger = new MMLogger("mm-metrics-collector", { console: true });
   }
 
