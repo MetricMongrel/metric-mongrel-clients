@@ -59,7 +59,6 @@ app.use(async (req, res, next) => {
   next();
 });
 
-
 app.get(
   "/randomEndpoint",
   async (req, res) => {

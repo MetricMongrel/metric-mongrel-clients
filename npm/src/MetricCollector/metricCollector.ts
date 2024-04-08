@@ -67,6 +67,25 @@ export class MetricCollector {
   }
 
   /**
+   * Capture request log event
+   */
+  public async captureRequestLog(
+    path: string,
+    method: string,
+    requestDuration: number,
+    referer?: string,
+    userAgent?: string
+  ) {
+    await this.sendPostRequest("/requestLog", {
+      path,
+      method,
+      requestDuration,
+      ...(referer ? { referer } : {}),
+      ...(userAgent ? { userAgent } : {}),
+    });
+  }
+
+  /**
    * Capture a model input/output
    */
   public async captureModelIO(
