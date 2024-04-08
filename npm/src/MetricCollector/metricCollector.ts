@@ -31,11 +31,14 @@ export class MetricCollector {
       "Content-Type": "application/json",
       Authorization: `Bearer ${this.apiKey}`,
     };
-    await fetch(url, {
+    const res = await fetch(url, {
       method: "POST",
       headers,
       body: JSON.stringify(body),
     });
+    if (res.status !== 200) {
+      throw new Error(`Failed to send metric: ${res.status}`);
+    }
   }
 
   /**
