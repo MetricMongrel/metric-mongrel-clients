@@ -1,3 +1,3 @@
-import { ErrorRequestHandlerLogger } from "./ErrorRequestHandler";
+import { ErrorRequestHandler } from "./ErrorRequestHandler";
 
-export default ErrorRequestHandlerLogger;
+export default ErrorRequestHandler;
