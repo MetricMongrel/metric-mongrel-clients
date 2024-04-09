@@ -22,15 +22,17 @@ export function AnalyticRequestHandler(
     const referer = req.headers["referer"];
     const userAgent = req.headers["user-agent"];
     const requestDuration = new Date().getTime() - startTime.getTime();
+    const statusCode = res.statusCode;
 
     /**
      * Report this back to HQ
      * @note This is a un-awaited promise, and will not block the request
      */
-    metricCollector.captureRequestLog(
+    metricCollector._captureRequestLog(
       path,
       method,
       requestDuration,
+      statusCode,
       referer,
       userAgent
     );

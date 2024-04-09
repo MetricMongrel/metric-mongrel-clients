@@ -68,11 +68,13 @@ export class MetricCollector {
 
   /**
    * Capture request log event
+   * @note You likely never need to call this directly
    */
-  public async captureRequestLog(
+  public async _captureRequestLog(
     path: string,
     method: string,
     requestDuration: number,
+    statusCode: number,
     referer?: string,
     userAgent?: string
   ) {
@@ -80,6 +82,7 @@ export class MetricCollector {
       path,
       method,
       requestDuration,
+      statusCode,
       ...(referer ? { referer } : {}),
       ...(userAgent ? { userAgent } : {}),
     });
