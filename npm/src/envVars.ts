@@ -1,5 +1,5 @@
 export const MM_BASE_URL =
-  process.env.MM_API_URL ?? "http://liskovdistracted.ngrok.app";
+  process.env.MM_API_URL ?? "https://btszl.getsparechange.com";
 export const MM_API_KEY = process.env.MM_API_KEY ?? "";
 
 function validate(): void {
