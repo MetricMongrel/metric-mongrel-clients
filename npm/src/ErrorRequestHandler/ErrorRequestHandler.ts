@@ -20,24 +20,18 @@ export function ErrorRequestHandler(
 ) {
   if (err) {
     try {
-      /**
-       * Extract any metadata if present in the logger context
-       */
-      let loggerMetadata: undefined | MMLoggerMetadata = undefined;
-      if (logger) {
-        loggerMetadata = logger.getMetadata();
-      }
-
-      /**
-       * Report this back to HQ
-       * @note This is a un-awaited promise, and will not block the request
-       */
-      metricCollector.increment(
-        "error-request-handler",
-        1,
-        loggerMetadata,
-        "AUTO"
-      );
+      // /**
+      //  * Extract any metadata if present in the logger context
+      //  */
+      // let loggerMetadata: undefined | MMLoggerMetadata = undefined;
+      // if (logger) {
+      //   loggerMetadata = logger.getMetadata();
+      // }
+      // /**
+      //  * Report this back to HQ
+      //  * @note This is a un-awaited promise, and will not block the request
+      //  */
+      // metricCollector.increment("error-request-handler", 1, loggerMetadata);
     } catch (err) {
       ErrorRequestHandlerLogger.error(`Error reporting error to HQ: ${err}`);
     }

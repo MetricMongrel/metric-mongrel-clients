@@ -1,6 +1,9 @@
 import bunyan from "bunyan";
 import { MMLoggerMetadata } from "./MMLogger.types";
 import httpContext from "express-http-context";
+import MMLoggerStreamWrapper from "./MMLoggerStreamWrapper";
+
+export const MM_LOGGER_HTTP_CONTEXT_KEY = "MLOGKEY";
 
 /**
  * Main Metric Mongrel Logger.
@@ -18,8 +21,32 @@ export class MMLogger {
   private console: boolean;
 
   constructor(loggerName: string, config?: { console?: boolean }) {
-    this.logger = bunyan.createLogger({ name: loggerName });
+    if (config?.console === true) {
+      this.logger = bunyan.createLogger({ name: loggerName });
+    } else {
+      const streams = [
+        { type: "stream", stream: process.stdout, level: "trace" as const },
+        {
+          type: "stream",
+          stream: new MMLoggerStreamWrapper(),
+          /**
+           * We only want info and above to push to our server
+           * @todo
+           */
+          level: "info" as const,
+        },
+      ];
+      this.logger = bunyan.createLogger({ name: loggerName, streams });
+    }
+
     this.console = config?.console ?? false;
+  }
+
+  /**
+   * Gets the metadata from the http context
+   */
+  getMetadataFromHttpContext(): string | undefined {
+    return httpContext.get(MM_LOGGER_HTTP_CONTEXT_KEY);
   }
 
   public setMetadata(metadata: MMLoggerMetadata): void {
@@ -35,6 +62,10 @@ export class MMLogger {
       httpContext.set("metadata", metadata);
     }
   }
+
+  /**
+   * Save the log to the
+   */
 
   /**
    * Log an info with the metadata
