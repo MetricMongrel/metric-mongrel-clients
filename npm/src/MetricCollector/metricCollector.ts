@@ -41,7 +41,9 @@ export class MetricCollector {
       credentials: "include",
     });
     if (res.status !== 200) {
-      this.logger.warn(`Failed to send MetricMongal: ${res.status}`);
+      this.logger.warn(
+        `Failed to send MetricMongal: ${res.status} with url: ${url}`
+      );
     }
   }
 
@@ -51,18 +53,12 @@ export class MetricCollector {
   public async increment(
     metricName: string,
     metricValue: number = 1,
-    metricMetadata?: { [key: string]: number | boolean | string },
-    /**
-     * Used to indicate if this is the result of an automatic process
-     * or a manual trigger
-     */
-    metricType?: "AUTO" | "MANUAL"
+    metricMetadata?: { [key: string]: number | boolean | string }
   ) {
     await this.sendPostRequest("/increment", {
       metricName,
       metricValue,
-      ...(metricMetadata ? metricMetadata : {}),
-      ...(metricType ? { metricType } : {}),
+      metricMetadata: metricMetadata === undefined ? {} : metricMetadata,
     });
   }
 
@@ -70,21 +66,19 @@ export class MetricCollector {
    * Capture request log event
    * @note You likely never need to call this directly
    */
-  public async _captureRequestLog(
-    path: string,
-    method: string,
-    requestDuration: number,
-    statusCode: number,
-    referer?: string,
-    userAgent?: string
-  ) {
-    await this.sendPostRequest("/requestLog", {
-      path,
-      method,
-      requestDuration,
-      statusCode,
-      ...(referer ? { referer } : {}),
-      ...(userAgent ? { userAgent } : {}),
+  public async _captureMetricTrace(args: {
+    metricName: string;
+    metricValue: number;
+    logs?: string;
+    metricMetadata?: { [key: string]: number | boolean | string };
+  }) {
+    const { metricName, metricValue, logs, metricMetadata } = args;
+
+    await this.sendPostRequest("/increment", {
+      metricName,
+      metricValue,
+      metricMetadata: metricMetadata === undefined ? {} : metricMetadata,
+      ...(logs === undefined ? {} : { logs }),
     });
   }
 
@@ -104,4 +98,17 @@ export class MetricCollector {
       ...(metricMetadata ? metricMetadata : {}),
     });
   }
+
+  // /**
+  //  * Capture an error and bundle up logs to send as well
+  //  */
+  // public async captureErrorAndTrace(
+  //   error: Error,
+  //   logs: { [key: string]: any }[]
+  // ) {
+  //   await this.sendPostRequest("/errorAndTrace", {
+  //     error,
+  //     logs,
+  //   });
+  // }
 }

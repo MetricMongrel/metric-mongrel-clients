@@ -1,6 +1,5 @@
 import { NextFunction, Response, Request } from "express";
 import metricCollector from "../MetricCollector";
-import { MMLoggerMetadata } from "../MMLogger/MMLogger.types";
 import { MMLogger } from "../MMLogger/MMLogger";
 
 /**
@@ -10,15 +9,16 @@ import { MMLogger } from "../MMLogger/MMLogger";
 export function AnalyticRequestHandler(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
+  mmLogger: MMLogger
 ) {
   const startTime = new Date();
   /**
    * Use close instead of finished, that way all compute is done
    * @see https://nodejs.org/api/stream.html#class-streamwritable
    */
-  res.once("close", () => {
-    const { path, method } = req;
+  res.once("close", async () => {
+    const { path, method, hostname } = req;
     const referer = req.headers["referer"];
     const userAgent = req.headers["user-agent"];
     const requestDuration = new Date().getTime() - startTime.getTime();
@@ -26,16 +26,22 @@ export function AnalyticRequestHandler(
 
     /**
      * Report this back to HQ
-     * @note This is a un-awaited promise, and will not block the request
      */
-    metricCollector._captureRequestLog(
-      path,
-      method,
-      requestDuration,
-      statusCode,
-      referer,
-      userAgent
-    );
+    await metricCollector._captureMetricTrace({
+      metricName: "requestDuration",
+      metricValue: requestDuration,
+      metricMetadata: {
+        path,
+        method,
+        statusCode,
+        hostname,
+        ...(referer ? { referer } : {}),
+        ...(userAgent ? { userAgent } : {}),
+      },
+      ...(mmLogger !== undefined && (statusCode < 200 || statusCode > 200)
+        ? { logs: mmLogger.getMetadataFromHttpContext() }
+        : {}),
+    });
   });
   next();
 }
